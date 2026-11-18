@@ -1,4 +1,3 @@
-import * as React from "react";
 import { Outlet, createRootRoute } from "@tanstack/react-router";
 import Navbar from "../layout/Navbar";
 import Footer from "../layout/Footer";

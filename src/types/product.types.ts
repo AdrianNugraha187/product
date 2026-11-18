@@ -52,3 +52,21 @@ export type ProductCardData = Pick<
   | "brand"
   | "availabilityStatus"
 >;
+
+export interface CreateProductPayload {
+  title: string;
+  description: string;
+  price: number;
+  discountPercentage?: number;
+  stock: number;
+  brand?: string;
+  category: string;
+  thumbnail?: string;
+}
+
+export type UpdateProductPayload = Partial<CreateProductPayload>;
+
+export interface DeletedProduct extends Product {
+  isDeleted: boolean;
+  deletedOn: string;
+}

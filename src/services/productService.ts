@@ -1,7 +1,9 @@
 import type {
+  CreateProductPayload,
   Product,
   ProductCardData,
   ProductResponse,
+  UpdateProductPayload,
 } from "../types/product.types";
 
 export interface PaginatedProductCards {
@@ -80,8 +82,16 @@ export function searchProducts({
   );
 }
 
-async function fetchJson<T>(url: string, signal?: AbortSignal): Promise<T> {
-  const res = await fetch(url, { signal });
+async function fetchJson<T>(
+  url: string,
+  options?: RequestInit,
+  signal?: AbortSignal,
+): Promise<T> {
+  const res = await fetch(url, {
+    ...options,
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    signal,
+  });
 
   if (!res.ok) {
     throw new Error(
@@ -96,55 +106,35 @@ export async function getProductById(
   id: string | number,
   signal?: AbortSignal,
 ): Promise<Product> {
-  return fetchJson(`${BASE_URL}/${id}`, signal);
+  return fetchJson(`${BASE_URL}/${id}`, undefined, signal);
 }
 
-// export async function addProduct(signal?: AbortSignal) {
-//   const res = await fetch(`${BASE_URL}/add`, {
-//     method: "POST",
-//     headers: { "Content-Type": "application/json" },
-//     body: JSON.stringify({
-//       title: "",
-//     }),
-//     signal,
-//   });
+export function addProduct(
+  payload: CreateProductPayload,
+  signal?: AbortSignal,
+) {
+  return fetchJson<Product>(`${BASE_URL}/add`, {
+    method: "POST",
+    body: JSON.stringify(payload),
+    signal,
+  });
+}
 
-//   if (!res.ok) {
-//     throw new Error(
-//       `HTTP ${res.status}: ${res.statusText || "Failed to fetch data"}`,
-//     );
-//   }
+export function updateProduct(
+  id: string | number,
+  payload: UpdateProductPayload,
+  signal?: AbortSignal,
+) {
+  return fetchJson<Product>(`${BASE_URL}/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(payload),
+    signal,
+  });
+}
 
-//   return res.json();
-// }
-
-// export async function updateProduct(id: string | number, signal?: AbortSignal) {
-//   const res = await fetch(`${BASE_URL}/${id}`, {
-//     method: "PUT",
-//     headers: { "Content-Type": "application/json" },
-//     body: JSON.stringify({
-//       title: "",
-//     }),
-//     signal,
-//   });
-
-//   if (!res.ok) {
-//     throw new Error(
-//       `HTTP ${res.status}: ${res.statusText || "Failed to fetch data"}`,
-//     );
-//   }
-
-//   return res.json();
-// }
-
-// export async function deleteProduct(id: string | number, signal?: AbortSignal) {
-//   const res = await fetch(`${BASE_URL}/${id}`, { method: "DELETE", signal });
-
-//   if (!res.ok) {
-//     throw new Error(
-//       `HTTP ${res.status}: ${res.statusText || "Failed to fetch data"}`,
-//     );
-//   }
-
-//   return res.json();
-// }
+export function deleteProduct(id: string | number, signal?: AbortSignal) {
+  return fetchJson(`${BASE_URL}/${id}`, {
+    method: "DELETE",
+    signal,
+  });
+}

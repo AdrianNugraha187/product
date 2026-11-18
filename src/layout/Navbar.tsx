@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import SearchBar from "../components/SearchBar";
 
 export default function Navbar() {
   return (
@@ -8,7 +9,7 @@ export default function Navbar() {
       </div>
 
       <div>
-        <Navbar />
+        <SearchBar />
       </div>
 
       <div>

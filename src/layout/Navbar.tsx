@@ -15,6 +15,9 @@ export default function Navbar() {
       <div>
         <Link to="/about-us">About Us</Link>
       </div>
+      <div>
+        <Link to="/products/new">+ Tambah Produk</Link>
+      </div>
     </div>
   );
 }

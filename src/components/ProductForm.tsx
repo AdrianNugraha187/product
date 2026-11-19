@@ -15,7 +15,7 @@ export default function ProductForm({
   isSubmitting = false,
   errorMessage = null,
   submitLabel = "Simpan Produk",
-}): ProductFormProps {
+}: ProductFormProps) {
   const [title, setTitle] = useState(initialData?.title ?? "");
   const [brand, setBrand] = useState(initialData?.brand ?? "");
   const [category, setCategory] = useState(initialData?.category ?? "");
@@ -95,5 +95,116 @@ export default function ProductForm({
       description: cleanDescription,
     });
   }
-  return <form onSubmit={handleSubmit} className="space-y-4"></form>;
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      {(validationError || errorMessage) && (
+        <div role="alert" className="text-red-500">
+          {validationError || errorMessage}
+        </div>
+      )}
+      <div>
+        <label htmlFor="title">Nama Produk *</label>
+        <input
+          type="text"
+          id="title"
+          value={title}
+          onChange={(event) => setTitle(event.target.value)}
+          disabled={isSubmitting}
+          placeholder="Contoh: Mechanical Keyboard Wireless"
+        />
+      </div>
+
+      <div>
+        <label htmlFor="brand">Brand</label>
+        <input
+          type="text"
+          id="brand"
+          value={brand}
+          onChange={(event) => setBrand(event.target.value)}
+          disabled={isSubmitting}
+          placeholder="Contoh: Keychron"
+        />
+      </div>
+
+      <div>
+        <label htmlFor="category">Kategori</label>
+        <input
+          type="text"
+          id="category"
+          value={category}
+          onChange={(event) => setCategory(event.target.value)}
+        />
+      </div>
+
+      <div>
+        <label htmlFor="price">Harga ($) *</label>
+        <input
+          id="price"
+          type="number"
+          step="0.01"
+          min="0"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+          disabled={isSubmitting}
+          placeholder="0.00"
+        />
+      </div>
+
+      <div>
+        <label htmlFor="discountPercentage">Diskon (%)</label>
+        <input
+          id="discountPercentage"
+          type="number"
+          step="0.01"
+          min="0"
+          max="100"
+          value={discountPercentage}
+          onChange={(e) => setDiscountPercentage(e.target.value)}
+          disabled={isSubmitting}
+        />
+      </div>
+
+      <div>
+        <label htmlFor="stock">Stok *</label>
+        <input
+          id="stock"
+          type="number"
+          min="0"
+          step="1"
+          value={stock}
+          onChange={(e) => setStock(e.target.value)}
+          disabled={isSubmitting}
+          placeholder="0"
+        />
+      </div>
+
+      <div>
+        <label htmlFor="thumbnail">URL Gambar Thumbnail</label>
+        <input
+          id="thumbnail"
+          type="url"
+          value={thumbnail}
+          onChange={(e) => setThumbnail(e.target.value)}
+          disabled={isSubmitting}
+          placeholder="https://example.com/image.jpg"
+        />
+      </div>
+
+      <div>
+        <label htmlFor="description">Deskripsi *</label>
+        <textarea
+          id="description"
+          rows={4}
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          disabled={isSubmitting}
+          placeholder="Jelaskan spesifikasi dan keunggulan produk..."
+        />
+      </div>
+
+      <button type="submit" disabled={isSubmitting}>
+        {isSubmitting ? "Menyimpan..." : submitLabel}
+      </button>
+    </form>
+  );
 }

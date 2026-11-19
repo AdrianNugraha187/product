@@ -1,5 +1,6 @@
 import type {
   CreateProductPayload,
+  DeletedProduct,
   Product,
   ProductCardData,
   ProductResponse,
@@ -120,11 +121,19 @@ export function addProduct(
   });
 }
 
+const DUMMYJSON_MAX_ID = 194;
+
 export function updateProduct(
   id: string | number,
   payload: UpdateProductPayload,
   signal?: AbortSignal,
 ) {
+  if (Number(id) > DUMMYJSON_MAX_ID) {
+    return {
+      id: Number(id),
+      ...payload,
+    } as Product;
+  }
   return fetchJson<Product>(`${BASE_URL}/${id}`, {
     method: "PUT",
     body: JSON.stringify(payload),
@@ -133,6 +142,13 @@ export function updateProduct(
 }
 
 export function deleteProduct(id: string | number, signal?: AbortSignal) {
+  if (Number(id) > DUMMYJSON_MAX_ID) {
+    return {
+      id: Number(id),
+      isDeleted: true,
+      deletedOn: new Date().toISOString(),
+    } as DeletedProduct;
+  }
   return fetchJson(`${BASE_URL}/${id}`, {
     method: "DELETE",
     signal,
